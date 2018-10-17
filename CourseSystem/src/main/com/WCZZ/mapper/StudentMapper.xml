@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="main.com.WCZZ.mapper.StudentMapper">
 
-
   <select id="query" parameterType="main.com.WCZZ.entity.Student" resultType="main.com.WCZZ.entity.Student">
     SELECT
       *
@@ -28,6 +27,7 @@
       </if>
     </where>
   </select>
+
 
 
   <insert id="add">

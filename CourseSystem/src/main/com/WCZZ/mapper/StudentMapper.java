@@ -9,7 +9,7 @@ import java.util.List;
 public interface StudentMapper{
     List<Student> query(Student student);
     Integer add(Student student);
-    Integer modifyPhone(Integer stuId, String phone);
+    Integer modifyPhone(String stuId, String phone);
     Integer modifyPassword(User user);
-    Integer delete(Integer stuId);
+    Integer delete(String stuId);
 }

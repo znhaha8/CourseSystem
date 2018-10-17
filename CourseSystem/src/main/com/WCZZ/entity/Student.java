@@ -3,19 +3,19 @@ package main.com.WCZZ.entity;
 import java.util.Date;
 
 public class Student {
-    private Integer stuId;
+    private String stuId;
 
     private String stuName;
 
     private String sex;
 
-    private Integer graName;
+    private String graName;
 
     private String acaName;
 
     private String proName;
 
-    private Integer claName;
+    private String claName;
 
     private String phone;
 
@@ -23,11 +23,11 @@ public class Student {
 
     private Integer delFlag;
 
-    public Integer getStuId() {
+    public String getStuId() {
         return stuId;
     }
 
-    public void setStuId(Integer stuId) {
+    public void setStuId(String stuId) {
         this.stuId = stuId;
     }
 
@@ -47,11 +47,11 @@ public class Student {
         this.sex = sex;
     }
 
-    public Integer getGraName() {
+    public String getGraName() {
         return graName;
     }
 
-    public void setGraName(Integer graName) {
+    public void setGraName(String graName) {
         this.graName = graName;
     }
 
@@ -71,11 +71,11 @@ public class Student {
         this.proName = proName;
     }
 
-    public Integer getClaName() {
+    public String getClaName() {
         return claName;
     }
 
-    public void setClaName(Integer claName) {
+    public void setClaName(String claName) {
         this.claName = claName;
     }
 
@@ -103,7 +103,7 @@ public class Student {
         this.delFlag = delFlag;
     }
 
-    public Student(Integer stuId, String stuName, Integer graName, String acaName, String proName, Integer claName) {
+    public Student(String stuId, String stuName, String graName, String acaName, String proName, String claName) {
         this.stuId = stuId;
         this.stuName = stuName;
         this.graName = graName;
@@ -112,7 +112,7 @@ public class Student {
         this.claName = claName;
     }
 
-    public Student(String stuName, String sex, Integer graName, String acaName, String proName, Integer claName, String phone) {
+    public Student(String stuName, String sex, String graName, String acaName, String proName, String claName, String phone) {
         this.stuName = stuName;
         this.sex = sex;
         this.graName = graName;

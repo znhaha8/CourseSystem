@@ -20,22 +20,21 @@ public class StudentController {
 
     @GetMapping(value = "/student/{stuId}/{stuName}/{graName}/{acaName}/{proName}/{claName}")
     @ResponseBody
-    public Map<String,List<Student>> query(@PathVariable(value = "stuId", required = false) Integer stuId,
+    public Map<String,List<Student>> query(@PathVariable(value = "stuId", required = false) String stuId,
                                            @PathVariable(value = "stuName", required = false) String stuName,
-                                           @PathVariable(value = "graName", required = false) Integer graName,
+                                           @PathVariable(value = "graName", required = false) String graName,
                                            @PathVariable(value = "acaName", required = false) String acaName,
                                            @PathVariable(value = "proName", required = false) String proName,
-                                           @PathVariable(value = "claName", required = false) Integer claName){
-        Student student = new Student(stuId, stuName, graName, acaName, proName, claName);
+                                           @PathVariable(value = "claName", required = false) String claName){
+        Student student = new Student(stuId.trim(), stuName.trim(), graName.trim(), acaName.trim(), proName.trim(), claName.trim());
+        System.out.println(student);
         List<Student> students = null;
         Map<String, List<Student>> resultMap = new HashMap<String, List<Student>>();
-        try {
-            students = studentService.query(student);
-        }catch (Exception e){
-        }
+        students = studentService.query(student);
         resultMap.put("result", students);
         return resultMap;
     }
+
 
 
     @PostMapping(value = "/student")
@@ -61,7 +60,7 @@ public class StudentController {
         int affectRows = 0;
         resultMap.put("result","success");
         try {
-                studentService.modify(user);
+
         }
         catch (Exception e){
             resultMap.put("result","fail");

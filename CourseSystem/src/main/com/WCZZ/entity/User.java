@@ -1,19 +1,21 @@
 package main.com.WCZZ.entity;
 
+import java.util.Date;
+import java.util.List;
+
 public class User {
-
-    private Integer username;
-
+    private String userId;
     private String password;
+    private boolean isDelete;
+    private Date createDate;
+    List<Role> userRoles;
 
-    private String roleType;
-
-    public Integer getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(Integer username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
@@ -21,23 +23,30 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
-    public String getRoleType() {
-        return roleType;
+    public boolean isDelete() {
+        return isDelete;
     }
 
-    public void setRoleType(String roleType) {
-        this.roleType = roleType == null ? null : roleType.trim();
+    public void setDelete(boolean delete) {
+        isDelete = delete;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "username=" + username +
-                ", password='" + password + '\'' +
-                ", roleType='" + roleType + '\'' +
-                '}';
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public List<Role> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<Role> userRoles) {
+        this.userRoles = userRoles;
     }
 }

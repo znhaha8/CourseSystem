@@ -35,11 +35,5 @@ public class StudentService {
        return studentMapper.add(student);
    }
 
-   @Transactional
-   public Integer modify(User user){
-       if(user.getUsername() == null || user.getPassword() == null || user.getPassword() =="")
-           return 0;
-       return studentMapper.modifyPassword(user);
-   }
 
 }
