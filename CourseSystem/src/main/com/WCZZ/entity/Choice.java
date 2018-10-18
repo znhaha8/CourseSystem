@@ -4,21 +4,21 @@ import java.util.Date;
 
 public class Choice {
 
-    private Integer stuId;
+    private String stuId;
 
     private Integer couId;
 
-    private Date chooseTime;
+    private Date chooseDate;
 
-    private Date withdrawTime;
+    private Date withdrawDate;
 
     private Integer delFlag;
 
-    public Integer getStuId() {
+    public String getStuId() {
         return stuId;
     }
 
-    public void setStuId(Integer stuId) {
+    public void setStuId(String stuId) {
         this.stuId = stuId;
     }
 
@@ -30,20 +30,20 @@ public class Choice {
         this.couId = couId;
     }
 
-    public Date getChooseTime() {
-        return chooseTime;
+    public Date getChooseDate() {
+        return chooseDate;
     }
 
-    public void setChooseTime(Date chooseTime) {
-        this.chooseTime = chooseTime;
+    public void setChooseDate(Date chooseDate) {
+        this.chooseDate = chooseDate;
     }
 
-    public Date getWithdrawTime() {
-        return withdrawTime;
+    public Date getWithdrawDate() {
+        return withdrawDate;
     }
 
-    public void setWithdrawTime(Date withdrawTime) {
-        this.withdrawTime = withdrawTime;
+    public void setWithdrawDate(Date withdrawDate) {
+        this.withdrawDate = withdrawDate;
     }
 
     public Integer getDelFlag() {

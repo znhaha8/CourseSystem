@@ -3,72 +3,103 @@ package main.com.WCZZ.controller;
 import main.com.WCZZ.entity.Student;
 import main.com.WCZZ.entity.User;
 import main.com.WCZZ.service.StudentService;
+import main.com.WCZZ.util.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/studentAPI")
+@RequestMapping("/student")
 public class StudentController {
 
     @Autowired
     StudentService studentService;
 
-    @GetMapping(value = "/student/{stuId}/{stuName}/{graName}/{acaName}/{proName}/{claName}")
+    @GetMapping(value = "/{stuId}")
     @ResponseBody
-    public Map<String,List<Student>> query(@PathVariable(value = "stuId", required = false) String stuId,
-                                           @PathVariable(value = "stuName", required = false) String stuName,
-                                           @PathVariable(value = "graName", required = false) String graName,
-                                           @PathVariable(value = "acaName", required = false) String acaName,
-                                           @PathVariable(value = "proName", required = false) String proName,
-                                           @PathVariable(value = "claName", required = false) String claName){
-        Student student = new Student(stuId.trim(), stuName.trim(), graName.trim(), acaName.trim(), proName.trim(), claName.trim());
-        System.out.println(student);
+    public Map<String,List<Student>> query(@PathVariable(value = "stuId") String stuId){
         List<Student> students = null;
         Map<String, List<Student>> resultMap = new HashMap<String, List<Student>>();
-        students = studentService.query(student);
+        students = studentService.query(stuId);
         resultMap.put("result", students);
         return resultMap;
     }
 
-
-
-    @PostMapping(value = "/student")
+    @PutMapping("/modify")
     @ResponseBody
-    public Map<String,String> add(@RequestBody Student student){
-        int affectRows = 0;
+    public Map<String,String> modifyPassword(String sessionID, HttpServletRequest request, HttpServletResponse response,
+                                             String stuId, String password){
         Map<String,String> resultMap = new HashMap<String,String>();
-        resultMap.put("result","success");
-        try {
-            studentService.addStudent(student);
+        if(UserStatus.isAuthenticated(sessionID,request,response) == false){
+            resultMap.put("result", "not login");
+            return resultMap;
         }
-        catch (Exception e){
+        if(studentService.modifyPassword(stuId, password) == 0){
             resultMap.put("result","fail");
+            return resultMap;
         }
-        if(affectRows <= 0 )resultMap.put("result","fail");
+        resultMap.put("result","success");
         return resultMap;
     }
 
-    @PutMapping("/student")
+    @GetMapping("/modify")
     @ResponseBody
-    public Map<String,String> modify(@RequestBody User user){
+    public Map<String,String> modifyPhone(String sessionID, HttpServletRequest request, HttpServletResponse response,
+                                             String stuId, String phone){
         Map<String,String> resultMap = new HashMap<String,String>();
-        int affectRows = 0;
-        resultMap.put("result","success");
-        try {
-
+        if(UserStatus.isAuthenticated(sessionID,request,response) == false){
+            resultMap.put("result", "not login");
+            return resultMap;
         }
-        catch (Exception e){
+        if(studentService.modifyPhone(stuId, phone) == 0){
             resultMap.put("result","fail");
+            return resultMap;
         }
-        if(affectRows <= 0 )resultMap.put("result","fail");
+        resultMap.put("result","success");
         return resultMap;
     }
 
 
+    @GetMapping(value = "/choose/{stuId}/{couId}")
+    @ResponseBody
+    public Map<String,String> chooseCourse(String sessionID, HttpServletRequest request, HttpServletResponse response,
+                                           @PathVariable(value = "stuId") String stuId,
+                                           @PathVariable(value = "couId") Integer  couId){
+        Map<String,String> resultMap = new HashMap<String,String>();
+        if(UserStatus.isAuthenticated(sessionID,request,response) == false){
+            resultMap.put("result", "not login");
+            return resultMap;
+        }
+        if(studentService.chooseCourse(stuId,couId) == 0){
+            resultMap.put("result", "fail");
+            return resultMap;
+        }
+        resultMap.put("result", "success");
+        return resultMap;
+    }
+
+    @GetMapping(value = "/withdraw/{stuId}/{couId}")
+    @ResponseBody
+    public Map<String,String> withdrawCourse(String sessionID, HttpServletRequest request, HttpServletResponse response,
+                                           @PathVariable(value = "stuId") String stuId,
+                                           @PathVariable(value = "couId") Integer couId){
+        Map<String,String> resultMap = new HashMap<String,String>();
+        if(UserStatus.isAuthenticated(sessionID,request,response) == false){
+            resultMap.put("result", "not login");
+            return resultMap;
+        }
+        if(studentService.withDrawCourse(stuId,couId) == 0){
+            resultMap.put("result", "fail");
+            return resultMap;
+        }
+        resultMap.put("result", "success");
+        return resultMap;
+    }
 
 }

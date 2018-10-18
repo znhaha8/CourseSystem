@@ -1,16 +1,16 @@
 package main.com.WCZZ.entity;
 
 public class Role {
-    private int id;
+    private int roleId;
     private String name;
     private String description;
 
-    public int getId() {
-        return id;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     public String getName() {

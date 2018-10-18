@@ -6,7 +6,7 @@ import java.util.List;
 public class User {
     private String userId;
     private String password;
-    private boolean isDelete;
+    private int delFlag;
     private Date createDate;
     List<Role> userRoles;
 
@@ -26,12 +26,12 @@ public class User {
         this.password = password;
     }
 
-    public boolean isDelete() {
-        return isDelete;
+    public int getDelFlag() {
+        return delFlag;
     }
 
-    public void setDelete(boolean delete) {
-        isDelete = delete;
+    public void setDelFlag(int delFlag) {
+        this.delFlag = delFlag;
     }
 
     public Date getCreateDate() {
@@ -49,4 +49,5 @@ public class User {
     public void setUserRoles(List<Role> userRoles) {
         this.userRoles = userRoles;
     }
+
 }
