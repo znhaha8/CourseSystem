@@ -5,6 +5,7 @@ import main.com.WCZZ.entity.Student;
 import main.com.WCZZ.mapper.ChoiceMapper;
 import main.com.WCZZ.mapper.StudentMapper;
 import main.com.WCZZ.mapper.UserMapper;
+import main.com.WCZZ.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,21 +30,25 @@ public class StudentService {
        return students;
    }
 
-   public Integer chooseCourse(String stuId, Integer couId){
-       if(choiceMapper.selectByIds(stuId,couId) != null) return 0;
+   public Integer chooseCourse(String stuId, String couName){
+       if(choiceMapper.queryByIdAndName(stuId,couName) != null) return 0;
        Choice choice = new Choice();
        choice.setStuId(stuId);
-       choice.setCouId(couId);
-       choice.setChooseDate(new Date());
+       choice.setCouName(couName);
+       choice.setChooseDate(TimeUtil.DateFormat());
        return choiceMapper.add(choice);
    }
 
-   public Integer withDrawCourse(String stuId, Integer couId){
+   public Integer withDrawCourse(String stuId, String couName){
        Choice choice = new Choice();
        choice.setStuId(stuId);
-       choice.setCouId(couId);
-       choice.setWithdrawDate(new Date());
+       choice.setCouName(couName);
+       choice.setWithdrawDate(TimeUtil.DateFormat());
        return choiceMapper.withdraw(choice);
+   }
+
+   public List<Choice> queryChoice(String stuId){
+       return choiceMapper.queryByStuId(stuId);
    }
 
    public Integer modifyPhone(String stuId, String phone){

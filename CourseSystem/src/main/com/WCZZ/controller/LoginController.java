@@ -8,6 +8,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +19,10 @@ import java.util.Map;
 @Controller
 public class LoginController {
     @Autowired
-    @Qualifier("userService")
     private UserService userService;
     //实现用户登录
     @ResponseBody
-    @RequestMapping(value = "/login")
+    @PostMapping(value = "/login")
     public Map<String,String> Login(String userId, String password){
         Map<String,String> resultMap = new HashMap<String,String>();
         User user=userService.getUserByUserId(userId);

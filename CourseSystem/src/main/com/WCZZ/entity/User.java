@@ -7,7 +7,7 @@ public class User {
     private String userId;
     private String password;
     private int delFlag;
-    private Date createDate;
+    private String createDate;
     List<Role> userRoles;
 
     public String getUserId() {
@@ -34,11 +34,12 @@ public class User {
         this.delFlag = delFlag;
     }
 
-    public Date getCreateDate() {
+
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 

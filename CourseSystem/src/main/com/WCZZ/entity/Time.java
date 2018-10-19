@@ -1,38 +1,46 @@
 package main.com.WCZZ.entity;
 
-import java.util.Date;
-
 public class Time {
 
-    private Integer graName;
+    private Integer TimeId;
 
-    private Date start;
+    private String graName;
 
-    private Date end;
+    private String start;
+
+    private String end;
 
     private String type;
 
-    public Integer getGraName() {
+    public String getGraName() {
         return graName;
     }
 
-    public void setGraName(Integer graName) {
+    public void setGraName(String graName) {
         this.graName = graName;
     }
 
-    public Date getStart() {
+    public Integer getTimeId() {
+        return TimeId;
+    }
+
+    public void setTimeId(Integer timeId) {
+        TimeId = timeId;
+    }
+
+    public String getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 

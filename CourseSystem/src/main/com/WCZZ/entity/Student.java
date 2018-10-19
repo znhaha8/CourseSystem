@@ -19,9 +19,8 @@ public class Student {
 
     private String phone;
 
-    private Date createTime;
+    private String createDate;
 
-    private Integer delFlag;
 
     public String getStuId() {
         return stuId;
@@ -87,21 +86,14 @@ public class Student {
         this.phone = phone;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 
-    public Integer getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Integer delFlag) {
-        this.delFlag = delFlag;
-    }
 
     public Student(String stuId, String stuName, String graName, String acaName, String proName, String claName) {
         this.stuId = stuId;
@@ -135,8 +127,7 @@ public class Student {
                 ", proName='" + proName + '\'' +
                 ", claName=" + claName +
                 ", phone='" + phone + '\'' +
-                ", createTime=" + createTime +
-                ", delFlag=" + delFlag +
+                ", createDate=" + createDate +
                 '}';
     }
 }

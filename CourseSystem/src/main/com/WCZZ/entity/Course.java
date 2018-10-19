@@ -13,7 +13,6 @@ public class Course {
 
     private Integer necessity;
 
-    private Integer delFlag;
 
     public Integer getCouId() {
         return couId;
@@ -63,11 +62,4 @@ public class Course {
         this.necessity = necessity;
     }
 
-    public Integer getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Integer delFlag) {
-        this.delFlag = delFlag;
-    }
 }

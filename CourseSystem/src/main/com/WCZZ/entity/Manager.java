@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Manager {
 
-    private Integer manId;
+    private String manId;
 
     private String manName;
 
@@ -16,15 +16,14 @@ public class Manager {
 
     private Integer graName;
 
-    private Date createTime;
+    private String createDate;
 
-    private Integer delFlag;
 
-    public Integer getManId() {
+    public String getManId() {
         return manId;
     }
 
-    public void setManId(Integer manId) {
+    public void setManId(String manId) {
         this.manId = manId;
     }
 
@@ -68,19 +67,12 @@ public class Manager {
         this.graName = graName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+
+    public String getCreateDate() {
+        return createDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Integer delFlag) {
-        this.delFlag = delFlag;
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
     }
 }

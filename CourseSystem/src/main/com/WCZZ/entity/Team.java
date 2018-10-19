@@ -6,7 +6,6 @@ public class Team {
     String aca_name;
     String pro_name;
     String class_name;
-    Integer delFlag;
 
     public Integer getId() {
         return claId;
@@ -48,11 +47,4 @@ public class Team {
         this.class_name = class_name;
     }
 
-    public Integer getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Integer delFlag) {
-        this.delFlag = delFlag;
-    }
 }

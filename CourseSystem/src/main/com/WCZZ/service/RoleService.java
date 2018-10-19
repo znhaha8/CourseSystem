@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("roleService")
+@Service
 public class RoleService {
     @Autowired
     private RoleMapper roleMapper;

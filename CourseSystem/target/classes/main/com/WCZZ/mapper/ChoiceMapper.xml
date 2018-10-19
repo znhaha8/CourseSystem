@@ -12,29 +12,40 @@
   <insert id="add" parameterType="main.com.WCZZ.entity.Choice">
     INSERT INTO choice(
       stu_id,
-      cou_id,
+      cou_name,
       choose_date,
       withdraw_date
       )
     VALUES (
       #{stuId},
-      #{couId},
+      #{couName},
       #{chooseDate},
       #{withdrawDate}
     )
   </insert>
   
-  <select id="selectByIds" resultType="main.com.WCZZ.entity.Choice">
+  <select id="queryByIdAndName" resultType="main.com.WCZZ.entity.Choice">
     SELECT 
       *
     FROM choice
     <where>
+      del_flag != 0
       <if test="stuId != null and stuId != ''">
-        stu_id = #{stuId}
+        AND stu_id LIKE CONCAT('%',#{stuId},'%')
       </if>
-      <if test="couId != null and couId != ''">
-        AND cou_id = #{couId}
+      <if test="couName != null and couName != ''">
+        AND cou_name LIKE CONCAT('%',#{couName},'%')
       </if>
+    </where>
+  </select>
+
+  <select id="queryByStuId" resultType="main.com.WCZZ.entity.Choice">
+    SELECT
+      *
+    FROM choice
+    <where>
+      del_flag != 0
+      AND stu_id = #{stuId}
     </where>
   </select>
 
@@ -44,7 +55,7 @@
     choose_date = #{chooseDate}
     WHERE
     stu_id = #{stuId}
-    AND cou_id = #{couId}
+    AND cou_name = #{couName}
   </update>
   
   <update id="withdraw" parameterType="main.com.WCZZ.entity.Choice">
@@ -53,6 +64,36 @@
       withdraw_date = #{withdrawDate}
     WHERE
       stu_id = #{stuId}
-      AND cou_id = #{couId}
+      AND cou_name = #{couName}
+  </update>
+
+  <update id="modifyByStuId" parameterType="main.com.WCZZ.entity.Choice">
+    UPDATE choice
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="couName != null and couName != ''">
+        cou_name = #{couName},
+      </if>
+      <if test="chooseDate != null">
+        choose_date = #{chooseDate},
+      </if>
+      <if test="withdrawDate != null">
+        withdraw_date = #{withdrawDate}
+      </if>
+    </trim>
+    <where>
+      stu_id = #{stuId}
+      AND del_flag != 0
+    </where>
+  </update>
+
+  <update id="delete" parameterType="main.com.WCZZ.entity.Choice">
+    UPDATE choice
+    SET
+      del_flag = 0
+    <where>
+      stu_id = #{stuId}
+      AND cou_name = #{couName}
+      AND choose_date = #{chooseDate}
+    </where>
   </update>
 </mapper>

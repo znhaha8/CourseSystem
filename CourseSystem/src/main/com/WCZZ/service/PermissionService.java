@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("permissionService")
+@Service
 public class PermissionService{
     @Autowired
     private PermissionMapper permissionMapper;

@@ -32,6 +32,7 @@
 
   <insert id="add">
     INSERT INTO student(
+      stu_id,
       stu_name,
       sex,
       gra_name,
@@ -39,9 +40,10 @@
       pro_name,
       cla_name,
       phone,
-      create_time
+      create_date
       )
     VALUES(
+      #{stuId},
       #{stuName},
       #{sex},
       #{graName},
@@ -49,7 +51,7 @@
       #{proName},
       #{claName},
       #{phone},
-      #{createTime}
+      #{createDate}
       )
   </insert>
 
@@ -72,6 +74,35 @@
     SET
       del_flag = 0
     WHERE stu_id = #{stuId}
+  </update>
+
+  <update id="modifyById" parameterType="main.com.WCZZ.entity.Student">
+    UPDATE student
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="stuName != null and stuName != ''">
+        stu_name = #{stuName},
+      </if>
+      <if test="sex != null and sex != ''">
+        sex = #{sex},
+      </if>
+      <if test="graName != null and graName != ''">
+        gra_name = #{graName},
+      </if>
+      <if test="acaName != null and acaName != '' ">
+        aca_name = #{acaName},
+      </if>
+      <if test="proName != null and proName != ''" >
+        pro_name = #{proName},
+      </if>
+      <if test="claName != null and claName != ''">
+        cla_name = #{claName},
+      </if>
+      <if test="phone != null and phone != ''">
+        phone = #{phone}
+      </if>
+    </trim>
+    WHERE
+      stu_id = #{stuId}
   </update>
 
 

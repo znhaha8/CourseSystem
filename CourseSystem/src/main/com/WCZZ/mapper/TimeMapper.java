@@ -4,10 +4,12 @@ import main.com.WCZZ.entity.Time;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TimeMapper{
     Integer add(Time time);
-    Time queryByGraAndType(@Param("graName") String graName, @Param("type") String type);
-    Integer modifyById(@Param("timeId") String timeId);
-    Integer deleteById(@Param("timeId") String timeId);
+    List<Time> queryByGraAndType(@Param("graName") String graName, @Param("type") String type);
+    Integer modify(Time time);
+    Integer deleteById(@Param("timeId") Integer timeId);
 }

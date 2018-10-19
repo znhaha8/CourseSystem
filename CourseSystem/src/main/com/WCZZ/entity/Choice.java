@@ -1,18 +1,15 @@
 package main.com.WCZZ.entity;
 
-import java.util.Date;
-
 public class Choice {
 
     private String stuId;
 
-    private Integer couId;
+    private String couName;
 
-    private Date chooseDate;
+    private String chooseDate;
 
-    private Date withdrawDate;
+    private String withdrawDate;
 
-    private Integer delFlag;
 
     public String getStuId() {
         return stuId;
@@ -22,35 +19,27 @@ public class Choice {
         this.stuId = stuId;
     }
 
-    public Integer getCouId() {
-        return couId;
+    public String getCouName() {
+        return couName;
     }
 
-    public void setCouId(Integer couId) {
-        this.couId = couId;
+    public void setCouName(String couName) {
+        this.couName = couName;
     }
 
-    public Date getChooseDate() {
+    public String getChooseDate() {
         return chooseDate;
     }
 
-    public void setChooseDate(Date chooseDate) {
+    public void setChooseDate(String chooseDate) {
         this.chooseDate = chooseDate;
     }
 
-    public Date getWithdrawDate() {
+    public String getWithdrawDate() {
         return withdrawDate;
     }
 
-    public void setWithdrawDate(Date withdrawDate) {
+    public void setWithdrawDate(String withdrawDate) {
         this.withdrawDate = withdrawDate;
-    }
-
-    public Integer getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(Integer delFlag) {
-        this.delFlag = delFlag;
     }
 }

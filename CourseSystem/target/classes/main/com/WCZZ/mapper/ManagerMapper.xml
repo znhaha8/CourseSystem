@@ -63,6 +63,30 @@
     WHERE username = #{username}
   </update>
 
+
+  <update id="modify" parameterType="main.com.WCZZ.entity.Manager">
+    UPDATE manager
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="manName != null and manName != ''">
+        man_name = #{manName},
+      </if>
+      <if test="sex != null and sex != ''">
+        sex = #{sex},
+      </if>
+      <if test="job != null and job != ''">
+        job = #{job},
+      </if>
+      <if test="phone != null and phone != ''">
+        phone = #{phone},
+      </if>
+      <if test="graName != null and graName != ''">
+        gra_name = #{graName}
+      </if>
+    </trim>
+    WHERE
+      man_id = #{man_id}
+  </update>
+
   <update id="delete">
     UPDATE manager
     SET

@@ -1,5 +1,6 @@
 package main.com.WCZZ.controller;
 
+import main.com.WCZZ.entity.Choice;
 import main.com.WCZZ.entity.Student;
 import main.com.WCZZ.entity.User;
 import main.com.WCZZ.service.StudentService;
@@ -48,10 +49,11 @@ public class StudentController {
         return resultMap;
     }
 
-    @GetMapping("/modify")
+    @GetMapping("/modify/{stuId}/{phone}")
     @ResponseBody
     public Map<String,String> modifyPhone(String sessionID, HttpServletRequest request, HttpServletResponse response,
-                                             String stuId, String phone){
+                                          @PathVariable(value = "stuId") String stuId,
+                                          @PathVariable(value = "phone") String phone){
         Map<String,String> resultMap = new HashMap<String,String>();
         if(UserStatus.isAuthenticated(sessionID,request,response) == false){
             resultMap.put("result", "not login");
@@ -66,17 +68,17 @@ public class StudentController {
     }
 
 
-    @GetMapping(value = "/choose/{stuId}/{couId}")
+    @GetMapping(value = "/choose/{stuId}/{couName}")
     @ResponseBody
     public Map<String,String> chooseCourse(String sessionID, HttpServletRequest request, HttpServletResponse response,
                                            @PathVariable(value = "stuId") String stuId,
-                                           @PathVariable(value = "couId") Integer  couId){
+                                           @PathVariable(value = "couName") String couName){
         Map<String,String> resultMap = new HashMap<String,String>();
         if(UserStatus.isAuthenticated(sessionID,request,response) == false){
             resultMap.put("result", "not login");
             return resultMap;
         }
-        if(studentService.chooseCourse(stuId,couId) == 0){
+        if(studentService.chooseCourse(stuId,couName) == 0){
             resultMap.put("result", "fail");
             return resultMap;
         }
@@ -84,17 +86,17 @@ public class StudentController {
         return resultMap;
     }
 
-    @GetMapping(value = "/withdraw/{stuId}/{couId}")
+    @GetMapping(value = "/withdraw/{stuId}/{couName}")
     @ResponseBody
     public Map<String,String> withdrawCourse(String sessionID, HttpServletRequest request, HttpServletResponse response,
                                            @PathVariable(value = "stuId") String stuId,
-                                           @PathVariable(value = "couId") Integer couId){
+                                           @PathVariable(value = "couName") String couName){
         Map<String,String> resultMap = new HashMap<String,String>();
         if(UserStatus.isAuthenticated(sessionID,request,response) == false){
             resultMap.put("result", "not login");
             return resultMap;
         }
-        if(studentService.withDrawCourse(stuId,couId) == 0){
+        if(studentService.withDrawCourse(stuId,couName) == 0){
             resultMap.put("result", "fail");
             return resultMap;
         }
@@ -102,4 +104,17 @@ public class StudentController {
         return resultMap;
     }
 
+    @GetMapping(value = "/choice/{stuId}")
+    @ResponseBody
+    public Map<String,List<Choice>> queryChoice(String sessionID, HttpServletRequest request, HttpServletResponse response,
+                                                   @PathVariable(value = "stuId") String stuId){
+        Map<String,List<Choice>> resultMap = new HashMap<String,List<Choice>>();
+        if(UserStatus.isAuthenticated(sessionID,request,response) == false){
+            resultMap.put("result", null);
+            return resultMap;
+        }
+        List<Choice> choices  = studentService.queryChoice(stuId);
+        resultMap.put("result", choices);
+        return resultMap;
+    }
 }

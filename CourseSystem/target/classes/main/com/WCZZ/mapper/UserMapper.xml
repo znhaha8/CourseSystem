@@ -9,10 +9,41 @@
         <collection property="userRoles" ofType="main.com.WCZZ.entity.Role" column="user_id" select="main.com.WCZZ.mapper.RoleMapper.selectByUserId"/>
     </resultMap>
 
+
+
     <select id="selectUserById" parameterType="string" resultMap="BaseResultMap">
-        Select
+        SELECT
          *
-        From user
-        Where user_id=#{userId}
+        FROM user
+        WHERE user_id=#{userId}
     </select>
+
+    <insert id="add">
+        INSERT INTO user(
+        user_id,
+        password,
+        create_date
+        )
+        VALUES (
+        #{userId},
+        #{password},
+        #{createDate}
+        )
+    </insert>
+
+    <update id="modifyPassword">
+        UPDATE user
+        SET
+          password = #{password}
+        WHERE
+          user_id = #{userId}
+    </update>
+
+    <update id="delete">
+        UPDATE user
+        SET
+          del_flag = 0
+        WHERE
+          user_id = #{userId}
+    </update>
 </mapper>
