@@ -16,13 +16,6 @@ public interface PermissionMapper {
      * @param roleId
      * @return
      */
-    @Select("select * from permission where roleId=#{roleId}")
-    @Results({
-            @Result(id=true,column = "per_id",property = "perId"),
-            @Result(column = "token",property = "token"),
-            @Result(column = "theurl",property = "theurl"),
-            @Result(column = "description",property = "description"),
-            @Result(column = "roleId",property = "roleId")
-    })
-    List<Permission> selectPermissionByRoleId(@Param("roleId") int roleId);
+
+    List<Permission> selectPermissionByRoleId(@Param("roleId") Integer roleId);
 }

@@ -5,10 +5,10 @@ import java.util.List;
 
 public class User {
     private String userId;
+    private String username;
     private String password;
     private int delFlag;
     private String createDate;
-    List<Role> userRoles;
 
     public String getUserId() {
         return userId;
@@ -16,6 +16,14 @@ public class User {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -41,14 +49,6 @@ public class User {
 
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
-    }
-
-    public List<Role> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(List<Role> userRoles) {
-        this.userRoles = userRoles;
     }
 
 }

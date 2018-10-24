@@ -16,11 +16,8 @@ public interface RoleMapper {
      * @param userId
      * @return
      */
-    @Select("select * from role where role_id in (select role_id from r_user_role where user_id=#{uerId})")
-    @Results({
-            @Result(id=true,column = "user_id",property = "userId"),
-            @Result(column = "name",property = "name"),
-            @Result(column = "description",property = "description")
-    })
+
     List<Role> selectByUserId(@Param("userId") String userId);
+
+    List<Integer> queryRoleIdByUserId (@Param("userId") String userId);
 }

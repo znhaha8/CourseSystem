@@ -2,49 +2,81 @@ package main.com.WCZZ.entity;
 
 public class Team {
     Integer claId;
-    String gra_name;
-    String aca_name;
-    String pro_name;
-    String class_name;
+    String graName;
+    String acaName;
+    String proName;
+    String claName;
+    String createDate;
 
-    public Integer getId() {
+    public Integer getClaId() {
         return claId;
     }
 
-    public void setId(Integer claId) {
+    public void setClaId(Integer claId) {
         this.claId = claId;
     }
 
-    public String getGra_name() {
-        return gra_name;
+
+    public String getGraName() {
+        return graName;
     }
 
-    public void setGra_name(String gra_name) {
-        this.gra_name = gra_name;
+    public void setGraName(String graName) {
+        this.graName = graName;
     }
 
-    public String getAca_name() {
-        return aca_name;
+    public String getAcaName() {
+        return acaName;
     }
 
-    public void setAca_name(String aca_name) {
-        this.aca_name = aca_name;
+    public void setAcaName(String acaName) {
+        this.acaName = acaName;
     }
 
-    public String getPro_name() {
-        return pro_name;
+    public String getProName() {
+        return proName;
     }
 
-    public void setPro_name(String pro_name) {
-        this.pro_name = pro_name;
+    public void setProName(String proName) {
+        this.proName = proName;
     }
 
-    public String getClass_name() {
-        return class_name;
+    public String getClaName() {
+        return claName;
     }
 
-    public void setClass_name(String class_name) {
-        this.class_name = class_name;
+    public void setClaName(String claName) {
+        this.claName = claName;
     }
 
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public Team(Integer claId, String graName, String acaName, String proName, String claName, String createDate) {
+        this.claId = claId;
+        this.graName = graName;
+        this.acaName = acaName;
+        this.proName = proName;
+        this.claName = claName;
+        this.createDate = createDate;
+    }
+
+    public Team() {}
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "claId=" + claId +
+                ", graName='" + graName + '\'' +
+                ", acaName='" + acaName + '\'' +
+                ", proName='" + proName + '\'' +
+                ", claName='" + claName + '\'' +
+                ", createDate='" + createDate + '\'' +
+                '}';
+    }
 }

@@ -1,27 +1,19 @@
 package main.com.WCZZ.entity;
 
 public class Permission {
-    private int perId;
-    private String token;
+    private Integer perId;
     private String theurl;
     private String description;
     private int roleId;
 
-    public int getPerId() {
+    public Integer getPerId() {
         return perId;
     }
 
-    public void setPerId(int perId) {
+    public void setPerId(Integer perId) {
         this.perId = perId;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public String getTheurl() {
         return theurl;

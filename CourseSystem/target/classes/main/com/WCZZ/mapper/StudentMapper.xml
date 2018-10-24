@@ -7,22 +7,23 @@
       *
     FROM student
     <where>
-      <if test='stuId != null and stuId != " "'>
-        stu_id LIKE CONCAT('%',#{stuId},'%')
+      del_flag != 0
+      <if test='stuId != null and stuId != ""'>
+        AND stu_id = #{stuId}
       </if>
-      <if test='stuName != null and stuName != " "'>
+      <if test='stuName != null and stuName != ""'>
         AND stu_name LIKE CONCAT('%',#{stuName},'%')
       </if>
-      <if test='graName != null and graName != " "'>
+      <if test='graName != null and graName != ""'>
         AND gra_name LIKE CONCAT('%',#{graName},'%')
       </if>
-      <if test='acaName != null and acaName != " "'>
+      <if test='acaName != null and acaName != ""'>
         AND aca_name LIKE CONCAT('%',#{acaName},'%')
       </if>
       <if test='proName != null and proName != " "'>
         AND pro_name LIKE CONCAT('%',#{proName},'%')
       </if>
-      <if test='claName != null and claName != " "'>
+      <if test='claName != null and claName != ""'>
         AND cla_name LIKE CONCAT('%',#{claName},'%')
       </if>
     </where>

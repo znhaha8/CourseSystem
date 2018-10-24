@@ -34,10 +34,10 @@
     <where>
       del_flag != 0
       <if test="graName != null and graName !=''">
-        AND gra_name LIKE CONCAT('%',#{graName},'%')
+        AND gra_name = #{graName}
       </if>
       <if test="type != null and type !=''">
-        AND type = LIKE CONCAT('%',#{type},'%')
+        AND type = #{type}
     </if>
     </where>
   </select>

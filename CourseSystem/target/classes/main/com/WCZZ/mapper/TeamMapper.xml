@@ -31,22 +31,22 @@
     <where>
       del_flag != 0
       <if test="claId != null">
-        AND cla_id LIKE CONCAT('%',#{claId},'%'),
+        AND cla_id LIKE CONCAT('%',#{claId},'%')
       </if>
       <if test="graName != null and graName != ''">
-        AND gra_name LIKE CONCAT('%',#{graName},'%'),
+        AND gra_name LIKE CONCAT('%',#{graName},'%')
       </if>
       <if test="acaName != null and acaName != ''">
-        AND aca_name LIKE CONCAT('%',#{acaName},'%'),
+        AND aca_name LIKE CONCAT('%',#{acaName},'%')
       </if>
       <if test="proName != null and proName != ''">
-        AND pro_name LIKE CONCAT('%',#{proName},'%'),
+        AND pro_name LIKE CONCAT('%',#{proName},'%')
       </if>
       <if test="claName != null and claName != ''">
-        AND cla_name LIKE CONCAT('%',#{claName},'%'),
+        AND cla_name LIKE CONCAT('%',#{claName},'%')
       </if>
-      <if test="createDate != null">
-        AND create_date LIKE CONCAT('%',#{createDate},'%'),
+      <if test="createDate != null and createDate!=''">
+        AND create_date LIKE CONCAT('%',#{createDate},'%')
       </if>
     </where>
   </select>

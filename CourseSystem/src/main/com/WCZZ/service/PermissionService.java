@@ -20,18 +20,18 @@ public class PermissionService{
     private RoleMapper roleMapper;
     @Autowired
     private UserMapper userMapper;
-    public List<Permission> getPermissionByUserId(String userid) {
-        List<Role> list=roleMapper.selectByUserId(userid);
+    public List<Permission> getPermissionByUserId(String userId) {
+        List<Integer> list=roleMapper.queryRoleIdByUserId(userId);
         List<Permission> permissions=new ArrayList<Permission>();
-        for(Role role:list){
-            List<Permission> permissionList=permissionMapper.selectPermissionByRoleId(role.getRoleId());
+        for(Integer roleId:list){
+            List<Permission> permissionList=permissionMapper.selectPermissionByRoleId(roleId);
             permissions.addAll(permissionList);
         }
         return permissions;
     }
 
-    public List<String> getTheUrl(String userid) {
-        User user=userMapper.selectUserById(userid);
+    public List<String> getTheUrl(String userId) {
+        User user=userMapper.selectUserById(userId);
         List<Permission> permissions=getPermissionByUserId(user.getUserId());
         List<String> listUrl=new ArrayList<String>();
         for(Permission permission:permissions){

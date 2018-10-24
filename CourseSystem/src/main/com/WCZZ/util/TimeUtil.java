@@ -7,9 +7,14 @@ import java.util.Date;
 
 public class TimeUtil {
 
-    public static String DateFormat() {
+    public static String dateToString(Date date) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String nowDate = dateFormat.format(new Date());
-        return nowDate;
+        String dateStr = dateFormat.format(date);
+        return dateStr;
+    }
+    public static Date stringToDate(String dateStr) throws ParseException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = dateFormat.parse(dateStr);
+        return date;
     }
 }

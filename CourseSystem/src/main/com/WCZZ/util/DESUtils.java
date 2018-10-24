@@ -1,3 +1,4 @@
+/*
 package main.com.WCZZ.util;
 
 import java.security.Key;
@@ -9,11 +10,13 @@ import java.util.Base64.Encoder;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 
+*/
 /**
  * DES加密解密工具类
  * @author wyz
  *
- */
+ *//*
+
 public class DESUtils {
 
     private static Key key;
@@ -33,13 +36,15 @@ public class DESUtils {
         }
     }
 
-    /**
+    */
+/**
      * 对字符串进行加密，返回BASE64的加密字符串
      * <功能详细描述>
      * @param str
      * @return
      * @see [类、类#方法、类#成员]
-     */
+     *//*
+
     public static String getEncryptString(String str) {
         Encoder encoder = Base64.getEncoder();
         try {
@@ -54,13 +59,15 @@ public class DESUtils {
 
     }
 
-    /**
+    */
+/**
      * 对BASE64加密字符串进行解密
      * <功能详细描述>
      * @param str
      * @return
      * @see [类、类#方法、类#成员]
-     */
+     *//*
+
     public static String getDecryptString(String str) {
         Decoder decoder = Base64.getDecoder();
         try {
@@ -74,3 +81,4 @@ public class DESUtils {
         }
     }
 }
+*/

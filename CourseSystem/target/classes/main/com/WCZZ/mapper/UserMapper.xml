@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="main.com.WCZZ.mapper.UserMapper">
-    <resultMap id="BaseResultMap" type="main.com.WCZZ.entity.User">
-        <id column="user_id" property="userId"/>
-        <result column="password" property="password"/>
-        <result column="create_date" property="createDate"/>
-        <result column="del_flag" property="delFlag"/>
-        <collection property="userRoles" ofType="main.com.WCZZ.entity.Role" column="user_id" select="main.com.WCZZ.mapper.RoleMapper.selectByUserId"/>
-    </resultMap>
 
-
-
-    <select id="selectUserById" parameterType="string" resultMap="BaseResultMap">
+    <select id="selectUserById" resultType="main.com.WCZZ.entity.User">
         SELECT
          *
         FROM user
         WHERE user_id=#{userId}
     </select>
+
+    <select id="findRoles" resultType="string">
+        select role from user u, role r,user_role ur where u.username=#{username} and u.id=ur.user_id and r.id=ur.role_id
+
+    </select>
+
+    <select id="findPermissions" resultType="string">
+        select permission
+        from user u, role r, permission p, user_role ur, role_permission rp
+        where u.username=#{username} and u.id=ur.user_id and r.id=ur.role_id and r.id=rp.role_id and p.id=rp.permission_id
+    </select>
+
+    <select id="findByUsername" resultType="main.com.WCZZ.entity.User">
+        select * from user where username=#{username}
+    </select>
+
 
     <insert id="add">
         INSERT INTO user(

@@ -10,17 +10,17 @@
         create_date
     </sql>
 
-    <select id="query">
+    <select id="query" resultType="main.com.WCZZ.entity.SuperManager">
         SELECT
           <include refid="baseSql" />
         FROM super_manager
         <where>
             del_flag != 0
-            <if test="supId != null">
-                sup_id LIKE CONCAT('%',#{supId},'%')
+            <if test="supId != null and supId != ''">
+                AND sup_id = #{supId}
             </if>
             <if test="supName != null and supName != ''">
-                sup_name LIKE CONCAT('%',#{supName},'%')
+                AND sup_name LIKE CONCAT('%',#{supName},'%')
             </if>
         </where>
     </select>
@@ -30,12 +30,12 @@
           <include refid="baseSql"/>
         )
         VALUES (
-          null,
+          #{supId},
           #{supName},
           #{sex},
           #{phone},
-          #{create_by},
-          #{create_date}
+          #{createBy},
+          #{createDate}
         )
     </insert>
 

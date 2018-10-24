@@ -11,7 +11,7 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package="main"    use-default-filters="false">
+    <context:component-scan base-package="main.com.WCZZ.controller" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
@@ -23,21 +23,6 @@
     <mvc:annotation-driven></mvc:annotation-driven>
 
     <mvc:default-servlet-handler></mvc:default-servlet-handler>
-
-    <!--&lt;!&ndash; 注册属性编辑器 &ndash;&gt;-->
-    <!--<bean id="customPropertyEditor" class="main.com.wyz.sales.util.CustomPropertyEditor"></bean>-->
-    <!--&lt;!&ndash; 自定义webBinder &ndash;&gt;-->
-    <!--<bean id="customBinder"-->
-          <!--class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">-->
-        <!--<property name="propertyEditorRegistrars">-->
-            <!--<list>-->
-                <!--<ref bean="customPropertyEditor"/>-->
-            <!--</list>-->
-        <!--</property>-->
-    <!--</bean>-->
-    <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">-->
-        <!--<property name="webBindingInitializer" ref="customBinder"></property>-->
-    <!--</bean>-->
 
     <!--mvc的注解驱动器，通过它可以替代下边的处理器映射器和适配器-->
     <mvc:annotation-driven conversion-service="conversionService">
@@ -53,4 +38,5 @@
             </list>
         </property>
     </bean>
+
 </beans>
