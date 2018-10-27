@@ -9,9 +9,8 @@ import java.util.List;
 @Repository
 public interface ChoiceMapper{
     Integer add(Choice choice);
-    List<Choice> queryByIdAndName(@Param("stuId") String stuId, @Param("couName")String couName);
-    Integer withdraw(Choice choice);
+    List<Choice> queryByIdAndName(@Param("choiceId") Integer choiceId, @Param("stuId") String stuId, @Param("couName")String couName);
+    Integer withdraw(@Param("choiceId") Integer choiceId, @Param("withdrawDate") String withdrawDate);
     List<Choice> queryByStuId(@Param("stuId") String stuId);
-    Integer modifyByStuId(Choice choice);
-    Integer delete(Choice choice);
+    Integer delete(@Param("choiceId") Integer choiceId);
 }

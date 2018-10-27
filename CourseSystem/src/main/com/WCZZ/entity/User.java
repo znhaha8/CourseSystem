@@ -4,18 +4,19 @@ import java.util.Date;
 import java.util.List;
 
 public class User {
-    private String userId;
+    private String id;
     private String username;
     private String password;
+    private String salt;
     private int delFlag;
     private String createDate;
 
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -28,6 +29,14 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public void setPassword(String password) {
@@ -51,4 +60,13 @@ public class User {
         this.createDate = createDate;
     }
 
+    User(){}
+
+    public User(String id, String username, String password, String salt, String createDate) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.salt = salt;
+        this.createDate = createDate;
+    }
 }

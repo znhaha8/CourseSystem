@@ -30,8 +30,11 @@
     FROM choice
     <where>
       del_flag != 0
+      <if test="choiceId != null">
+        AND choice_id  = #{choiceId}
+      </if>
       <if test="stuId != null and stuId != ''">
-        AND stu_id LIKE CONCAT('%',#{stuId},'%')
+        AND stu_id = #{stuId}
       </if>
       <if test="couName != null and couName != ''">
         AND cou_name LIKE CONCAT('%',#{couName},'%')
@@ -50,12 +53,16 @@
   </select>
 
   <update id="choose" parameterType="main.com.WCZZ.entity.Choice">
-    UPDATE choice
-    SET
-    choose_date = #{chooseDate}
-    WHERE
-    stu_id = #{stuId}
-    AND cou_name = #{couName}
+    INSERT INTO choice(
+      stu_id,
+      cou_name,
+      choose_date
+    )
+    VALUES (
+      #{stuId},
+      #{couName},
+      #{chooseDate}
+    )
   </update>
   
   <update id="withdraw" parameterType="main.com.WCZZ.entity.Choice">
@@ -63,37 +70,17 @@
     SET
       withdraw_date = #{withdrawDate}
     WHERE
-      stu_id = #{stuId}
-      AND cou_name = #{couName}
+      del_flag != 0
+      AND choice_id = #{choiceId}
   </update>
 
-  <update id="modifyByStuId" parameterType="main.com.WCZZ.entity.Choice">
-    UPDATE choice
-    <trim prefix="SET" suffixOverrides=",">
-      <if test="couName != null and couName != ''">
-        cou_name = #{couName},
-      </if>
-      <if test="chooseDate != null">
-        choose_date = #{chooseDate},
-      </if>
-      <if test="withdrawDate != null">
-        withdraw_date = #{withdrawDate}
-      </if>
-    </trim>
-    <where>
-      stu_id = #{stuId}
-      AND del_flag != 0
-    </where>
-  </update>
 
-  <update id="delete" parameterType="main.com.WCZZ.entity.Choice">
+  <update id="delete">
     UPDATE choice
     SET
       del_flag = 0
     <where>
-      stu_id = #{stuId}
-      AND cou_name = #{couName}
-      AND choose_date = #{chooseDate}
+      choice_id = #{choiceId}
     </where>
   </update>
 </mapper>

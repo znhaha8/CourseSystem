@@ -28,6 +28,12 @@
         )
     </insert>
 
+    <select id="stuQuery" resultType="main.com.WCZZ.entity.Course">
+        SELECT * FROM course WHERE del_flag != 0 AND cou_name IN (
+          SELECT cou_name FROM student_course WHERE del_flag != 0 AND gra_name = #{graName} AND pro_name = #{proName}
+        )
+    </select>
+
     <select id="query" resultType="main.com.WCZZ.entity.Course">
         SELECT
           *

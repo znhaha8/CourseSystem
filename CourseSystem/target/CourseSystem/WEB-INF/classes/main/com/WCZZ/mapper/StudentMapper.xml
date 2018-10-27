@@ -26,6 +26,9 @@
       <if test='claName != null and claName != ""'>
         AND cla_name LIKE CONCAT('%',#{claName},'%')
       </if>
+      <if test='createDate != null and createDate != ""'>
+        AND create_date LIKE CONCAT('%',#{createDate},'%')
+      </if>
     </where>
   </select>
 
@@ -59,7 +62,9 @@
   <update id="modifyPhone">
     UPDATE student
     SET
+    <if test="phone != null and phone != ''">
       phone = #{phone}
+    </if>
     WHERE stu_id = #{stuId}
   </update>
 

@@ -10,15 +10,10 @@ import java.util.Set;
 
 @Repository
 public interface UserMapper{
-    /**
-     * 根据用户名查询用户的所有信息
-     * @param userId
-     * @return
-     */
-    User selectUserById(@Param("userId") String userId);
-    Integer add(@Param("userId") String userId, @Param("password") String password, @Param("createDate") String createDate);
-    Integer modifyPassword(@Param("userId") String userId, @Param("password") String password);
-    Integer delete(@Param("userId") String userId);
+
+    Integer add(User user);
+    Integer modifyPassword(@Param("username") String username, @Param("password") String password);
+    Integer delete(@Param("id") String id);
 
     Set<String> findRoles(@Param("username") String username);
 

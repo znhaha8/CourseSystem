@@ -2,6 +2,8 @@ package main.com.WCZZ.entity;
 
 public class Choice {
 
+    private Integer choiceId;
+
     private String stuId;
 
     private String couName;
@@ -10,6 +12,13 @@ public class Choice {
 
     private String withdrawDate;
 
+    public Integer getChoiceId() {
+        return choiceId;
+    }
+
+    public void setChoiceId(Integer choiceId) {
+        this.choiceId = choiceId;
+    }
 
     public String getStuId() {
         return stuId;

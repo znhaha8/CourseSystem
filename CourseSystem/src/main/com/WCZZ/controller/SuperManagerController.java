@@ -1,10 +1,11 @@
 package main.com.WCZZ.controller;
 
-import main.com.WCZZ.entity.Manager;
-import main.com.WCZZ.entity.Student;
-import main.com.WCZZ.entity.SuperManager;
-import main.com.WCZZ.entity.Team;
+import main.com.WCZZ.entity.*;
 import main.com.WCZZ.service.SuperManagerService;
+import main.com.WCZZ.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 @CrossOrigin
@@ -22,18 +24,13 @@ public class SuperManagerController {
 
     @Autowired
     SuperManagerService superManagerService;
+    @Autowired
+    UserService userService;
 
     @GetMapping(value = "/self")
     @ResponseBody
-    public Map<String,List<SuperManager>> querySupManager(
-            String sessionID, HttpServletRequest request, HttpServletResponse response,
-            String supId,
-            String supName){
+    public Map<String,List<SuperManager>> querySupManager(String supId, String supName){
         Map<String, List<SuperManager>> resultMap = new HashMap<String, List<SuperManager>>();
-       /* if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", null);
-            return resultMap;
-        }*/
         resultMap.put("result", superManagerService.querySupManager(supId,supName));
         return resultMap;
     }
@@ -41,14 +38,10 @@ public class SuperManagerController {
 
     @PostMapping(value = "/self")
     @ResponseBody
-    public Map<String,String> addSupManager(
-            String sessionID, HttpServletRequest request, HttpServletResponse response,
-            @RequestBody SuperManager superManager){
+    public Map<String,String> addSupManager(@RequestBody SuperManager superManager){
         Map<String,String> resultMap = new HashMap<String,String>();
-        /*if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", "not login");
-            return resultMap;
-        }*/
+        String createBy = (String)SecurityUtils.getSubject().getPrincipal();
+        superManager.setCreateBy(createBy);
         resultMap.put("result","success");
         if(superManagerService.addSupManager(superManager) <= 0 )
             resultMap.put("result","fail");
@@ -57,13 +50,10 @@ public class SuperManagerController {
 
     @PutMapping(value = "/self")
     @ResponseBody
-    public Map<String, String> modifySupManager(String sessionID, HttpServletRequest request, HttpServletResponse response,
-                                             @RequestBody SuperManager superManager){
+    public Map<String, String> modifySupManager(@RequestBody SuperManager superManager){
         Map<String,String> resultMap = new HashMap<String,String>();
-        /*if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", "not login");
-            return resultMap;
-        }*/
+        String supId = (String)SecurityUtils.getSubject().getPrincipal();   //id和用户名相同
+        superManager.setSupId(supId);
         if(superManagerService.modifySupManager(superManager) == 0){
             resultMap.put("result","fail");
             return resultMap;
@@ -74,13 +64,9 @@ public class SuperManagerController {
 
     @DeleteMapping(value = "/self")
     @ResponseBody
-    public Map<String, String> deleteSupManager(String sessionID, HttpServletRequest request, HttpServletResponse response,
-                                                String supId){
+    public Map<String, String> deleteSupManager(){
         Map<String,String> resultMap = new HashMap<String,String>();
-        /*if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", "not login");
-            return resultMap;
-        }*/
+        String supId = (String)SecurityUtils.getSubject().getPrincipal();
         if(superManagerService.deleteSupManager(supId) == 0){
             resultMap.put("result","fail");
             return resultMap;
@@ -91,16 +77,8 @@ public class SuperManagerController {
 
     @GetMapping(value = "/manager")
     @ResponseBody
-    public Map<String,List<Manager>> queryManager(
-            String sessionID, HttpServletRequest request, HttpServletResponse response,
-            String manId,
-            String manName,
-            String graName){
+    public Map<String,List<Manager>> queryManager(String manId,String manName,String graName){
         Map<String, List<Manager>> resultMap = new HashMap<String, List<Manager>>();
-       /* if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", null);
-            return resultMap;
-        }*/
         resultMap.put("result", superManagerService.queryManager(manId,manName,graName));
         return resultMap;
     }
@@ -108,14 +86,8 @@ public class SuperManagerController {
 
     @PostMapping(value = "/manager")
     @ResponseBody
-    public Map<String,String> addManager(
-            String sessionID, HttpServletRequest request, HttpServletResponse response,
-            @RequestBody Manager manager){
+    public Map<String,String> addManager(@RequestBody Manager manager){
         Map<String,String> resultMap = new HashMap<String,String>();
-       /* if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", "not login");
-            return resultMap;
-        }*/
         resultMap.put("result","success");
         if(superManagerService.addManager(manager) <= 0 )
             resultMap.put("result","fail");
@@ -124,13 +96,8 @@ public class SuperManagerController {
 
     @PutMapping(value = "/manager")
     @ResponseBody
-    public Map<String, String> modifyManager(String sessionID, HttpServletRequest request, HttpServletResponse response,
-                                                @RequestBody Manager manager){
+    public Map<String, String> modifyManager(@RequestBody Manager manager){
         Map<String,String> resultMap = new HashMap<String,String>();
-       /* if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", "not login");
-            return resultMap;
-        }*/
         if(superManagerService.modifyManager(manager) == 0){
             resultMap.put("result","fail");
             return resultMap;
@@ -139,15 +106,23 @@ public class SuperManagerController {
         return resultMap;
     }
 
+    @PutMapping(value = "/manager/modifyPassword")
+    @ResponseBody
+    public Map<String, String> modifyStudentPassword(String username, String password){
+        Map<String,String> resultMap = new HashMap<String,String>();
+        Set<String> roles = userService.findRoles(username);
+        if (roles != null && roles.contains("manager") && userService.modifyPassword(username, password) != 0) {
+            resultMap.put("result", "success");
+            return resultMap;
+        }
+        resultMap.put("result","fail");
+        return resultMap;
+    }
+
     @DeleteMapping(value = "/manager")
     @ResponseBody
-    public Map<String, String> deleteManager(String sessionID, HttpServletRequest request, HttpServletResponse response,
-                                             String manId){
+    public Map<String, String> deleteManager(String manId){
         Map<String,String> resultMap = new HashMap<String,String>();
-        /*if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", "not login");
-            return resultMap;
-        }*/
         if(superManagerService.deleteManager(manId) == 0){
             resultMap.put("result","fail");
             return resultMap;
@@ -158,19 +133,10 @@ public class SuperManagerController {
 
     @GetMapping(value = "/team")
     @ResponseBody
-    public Map<String,List<Team>> queryTeam(
-            String sessionID, HttpServletRequest request, HttpServletResponse response,
-            Integer claId,
-            String graName,
-            String acaName,
-            String proName,
-            String claName,
-            String createDate){
+    public Map<String,List<Team>> queryTeam(Integer claId, String graName,
+                                            String acaName, String proName,
+                                            String claName, String createDate){
         Map<String, List<Team>> resultMap = new HashMap<String, List<Team>>();
-        /*if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", null);
-            return resultMap;
-        }*/
         Team team = new Team(claId, graName, acaName, proName, claName, createDate);
         resultMap.put("result", superManagerService.queryTeam(team));
         return resultMap;
@@ -179,14 +145,8 @@ public class SuperManagerController {
 
     @PostMapping(value = "/team")
     @ResponseBody
-    public Map<String,String> addTeam(
-            String sessionID, HttpServletRequest request, HttpServletResponse response,
-            @RequestBody Team team){
+    public Map<String,String> addTeam(@RequestBody Team team){
         Map<String,String> resultMap = new HashMap<String,String>();
-       /* if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", "not login");
-            return resultMap;
-        }*/
         resultMap.put("result","success");
         if(superManagerService.addTeam(team) <= 0 )
             resultMap.put("result","fail");
@@ -195,13 +155,8 @@ public class SuperManagerController {
 
     @DeleteMapping(value = "/team")
     @ResponseBody
-    public Map<String, String> deleteManager(String sessionID, HttpServletRequest request, HttpServletResponse response,
-                                             Integer claId){
+    public Map<String, String> deleteManager(Integer claId){
         Map<String,String> resultMap = new HashMap<String,String>();
-       /* if(UserStatus.isAuthenticated(sessionID,request,response) == false){
-            resultMap.put("result", "not login");
-            return resultMap;
-        }*/
         if(superManagerService.deleteTeam(claId) == 0){
             resultMap.put("result","fail");
             return resultMap;
@@ -209,8 +164,5 @@ public class SuperManagerController {
         resultMap.put("result","success");
         return resultMap;
     }
-
-
-
 
 }

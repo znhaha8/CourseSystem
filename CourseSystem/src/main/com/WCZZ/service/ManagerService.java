@@ -4,6 +4,7 @@ import main.com.WCZZ.entity.*;
 import main.com.WCZZ.mapper.*;
 import main.com.WCZZ.util.IdGenerator;
 import main.com.WCZZ.util.TimeUtil;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class ManagerService {
@@ -24,6 +26,10 @@ public class ManagerService {
     TimeMapper timeMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    UserRoleMapper userRoleMapper;
+    @Autowired
+    StuCourseMapper stuCourseMapper;
 
 
     public List<Student> queryStudent(Student student){
@@ -39,7 +45,15 @@ public class ManagerService {
         String createDate = TimeUtil.dateToString(new Date());
         student.setStuId(stuId);
         student.setCreateDate(createDate);
-        int res = (userMapper.add(stuId,password,createDate) == 1 && studentMapper.add(student) == 1) ? 1 : 0;
+        Random random = new Random();
+        String salt = String.valueOf(random.nextInt(10000));
+        Md5Hash md5Hash = new Md5Hash(password,salt);
+        password = md5Hash.toString();
+        User user = new User(stuId,stuId,password,salt,createDate);
+        int res = (userMapper.add(user) == 1
+                && studentMapper.add(student) == 1
+                && userRoleMapper.add(user.getId(),3) == 1)
+                ? 1 : 0;
         return res;
     }
 
@@ -47,23 +61,24 @@ public class ManagerService {
     public Integer modifyStudent(Student student){
         return studentMapper.modifyById(student);
     }
+
     @Transactional
     public Integer deleteStudent(String stuId){
-        return studentMapper.delete(stuId);
+        Integer res = (studentMapper.delete(stuId) == 0
+                || userMapper.delete(stuId)==0
+                || userRoleMapper.delete(stuId) == 0)
+                ? 0 : 1;
+        return res;
     }
 
-    public List<Choice> queryChoice(String stuId, String couName){
-        return choiceMapper.queryByIdAndName(stuId,couName);
+    public List<Choice> queryChoice(Integer choiceId, String stuId, String couName){
+        return choiceMapper.queryByIdAndName(choiceId,stuId,couName);
     }
+
 
     @Transactional
-    public Integer modifyChoice(Choice choice){
-        return choiceMapper.modifyByStuId(choice);
-    }
-
-    @Transactional
-    public Integer deleteChoice(Choice choice){
-        return choiceMapper.delete(choice);
+    public Integer deleteChoice(Integer choiceId){
+        return choiceMapper.delete(choiceId);
     }
 
     @Transactional
@@ -84,6 +99,36 @@ public class ManagerService {
     public Integer deleteCourse(Integer couId){
         return courseMapper.deleteById(couId);
     }
+
+
+
+    @Transactional
+    public Integer addStuCourse(StudentCourse studentCourse){
+        if(stuCourseMapper.query(studentCourse).size() != 0)
+            return 0;
+        if(courseMapper.query(studentCourse.getCouName()).size() == 0)
+            return 0;
+        return stuCourseMapper.add(studentCourse);
+    }
+
+    public List<StudentCourse> queryStuCourse(String graName, String proName, String couName){
+        StudentCourse studentCourse = new StudentCourse(graName, proName, couName);
+        return stuCourseMapper.query(studentCourse);
+    }
+
+    @Transactional
+    public Integer modifyStuCourse(StudentCourse studentCourse){
+        if(courseMapper.query(studentCourse.getCouName()).size() == 0)
+            return 0;
+        return stuCourseMapper.modify(studentCourse);
+    }
+
+    @Transactional
+    public Integer deleteStuCourse(Integer stuCourseId){
+        return stuCourseMapper.delete(stuCourseId);
+    }
+
+
 
     @Transactional
     public Integer addTime(Time time){
@@ -120,5 +165,6 @@ public class ManagerService {
     public Integer deleteTime(Integer timeId){
         return timeMapper.deleteById(timeId);
     }
+
 
 }
