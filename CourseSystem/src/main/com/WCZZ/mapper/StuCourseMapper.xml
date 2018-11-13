@@ -19,6 +19,7 @@
         </where>
     </select>
 
+
     <insert id="add" parameterType="main.com.WCZZ.entity.StudentCourse">
         INSERT INTO student_course(
           gra_name,

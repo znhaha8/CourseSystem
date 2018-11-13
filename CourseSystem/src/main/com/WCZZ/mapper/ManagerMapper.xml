@@ -24,7 +24,7 @@
   </insert>
 
 
-  <select id="query" parameterType="main.com.WCZZ.entity.Manager" resultType="main.com.WCZZ.entity.Manager">
+  <select id="query" resultType="main.com.WCZZ.entity.Manager">
     SELECT
     *
     FROM manager
@@ -49,15 +49,6 @@
     WHERE man_id = #{manId}
       AND del_flag != 0
   </update>
-
-  <update id="modifyPassword" parameterType="main.com.WCZZ.entity.User">
-    UPDATE user
-    SET
-    password = #{password}
-    WHERE username = #{username}
-      AND del_flag != 0
-  </update>
-
 
   <update id="modify" parameterType="main.com.WCZZ.entity.Manager">
     UPDATE manager

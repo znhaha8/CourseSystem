@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class SuperManagerController {
     @Autowired
     UserService userService;
 
-    @GetMapping(value = "/self")
+    @GetMapping(value = "/selves")
     @ResponseBody
     public Map<String,List<SuperManager>> querySupManager(String supId, String supName){
         Map<String, List<SuperManager>> resultMap = new HashMap<String, List<SuperManager>>();
@@ -35,26 +36,36 @@ public class SuperManagerController {
         return resultMap;
     }
 
+    @GetMapping(value = "/self")
+    @ResponseBody
+    public Map<String,List<SuperManager>> querySelf(){
+        Map<String, List<SuperManager>> resultMap = new HashMap<String, List<SuperManager>>();
+        String supId = (String)SecurityUtils.getSubject().getPrincipal();
+        resultMap.put("result", superManagerService.querySupManager(supId,null));
+        return resultMap;
+    }
+
 
     @PostMapping(value = "/self")
     @ResponseBody
     public Map<String,String> addSupManager(@RequestBody SuperManager superManager){
-        Map<String,String> resultMap = new HashMap<String,String>();
         String createBy = (String)SecurityUtils.getSubject().getPrincipal();
         superManager.setCreateBy(createBy);
+        Map<String,String> resultMap = superManagerService.addSupManager(superManager);
         resultMap.put("result","success");
-        if(superManagerService.addSupManager(superManager) <= 0 )
+        if(!resultMap.get("msg").equals("success"))
             resultMap.put("result","fail");
         return resultMap;
     }
 
     @PutMapping(value = "/self")
     @ResponseBody
-    public Map<String, String> modifySupManager(@RequestBody SuperManager superManager){
-        Map<String,String> resultMap = new HashMap<String,String>();
+    public Map<String, String> modifyPhone(@RequestBody SuperManager superManager){
         String supId = (String)SecurityUtils.getSubject().getPrincipal();   //id和用户名相同
         superManager.setSupId(supId);
-        if(superManagerService.modifySupManager(superManager) == 0){
+        Map<String,String> resultMap = superManagerService.modifySupManager(superManager);
+
+        if(!resultMap.get("msg").equals("success")){
             resultMap.put("result","fail");
             return resultMap;
         }
@@ -65,9 +76,9 @@ public class SuperManagerController {
     @DeleteMapping(value = "/self")
     @ResponseBody
     public Map<String, String> deleteSupManager(){
-        Map<String,String> resultMap = new HashMap<String,String>();
         String supId = (String)SecurityUtils.getSubject().getPrincipal();
-        if(superManagerService.deleteSupManager(supId) == 0){
+        Map<String,String> resultMap = superManagerService.deleteSupManager(supId);
+        if(!resultMap.get("msg").equals("success")){
             resultMap.put("result","fail");
             return resultMap;
         }
@@ -87,18 +98,19 @@ public class SuperManagerController {
     @PostMapping(value = "/manager")
     @ResponseBody
     public Map<String,String> addManager(@RequestBody Manager manager){
-        Map<String,String> resultMap = new HashMap<String,String>();
+        Map<String,String> resultMap = superManagerService.addManager(manager);
         resultMap.put("result","success");
-        if(superManagerService.addManager(manager) <= 0 )
-            resultMap.put("result","fail");
+        if(!resultMap.get("msg").equals("success")) {
+            resultMap.put("result", "fail");
+        }
         return resultMap;
     }
 
     @PutMapping(value = "/manager")
     @ResponseBody
     public Map<String, String> modifyManager(@RequestBody Manager manager){
-        Map<String,String> resultMap = new HashMap<String,String>();
-        if(superManagerService.modifyManager(manager) == 0){
+        Map<String,String> resultMap = superManagerService.modifyManager(manager);
+        if(!resultMap.get("msg").equals("success")){
             resultMap.put("result","fail");
             return resultMap;
         }
@@ -111,19 +123,31 @@ public class SuperManagerController {
     public Map<String, String> modifyStudentPassword(String username, String password){
         Map<String,String> resultMap = new HashMap<String,String>();
         Set<String> roles = userService.findRoles(username);
-        if (roles != null && roles.contains("manager") && userService.modifyPassword(username, password) != 0) {
+        if (roles != null){
+            resultMap.put("result","fail");
+            resultMap.put("msg","对象用户角色为空");
+            return resultMap;
+        }
+        if(roles.contains("manager")){
+            resultMap.put("result","fail");
+            resultMap.put("msg","对象用户不持有管理员角色");
+            return resultMap;
+        }
+        if(userService.modifyPassword(username, password) != 0) {
             resultMap.put("result", "success");
+            resultMap.put("msg","success");
             return resultMap;
         }
         resultMap.put("result","fail");
+        resultMap.put("result", "确认用户名是否正确和密码长度是否过长");
         return resultMap;
     }
 
     @DeleteMapping(value = "/manager")
     @ResponseBody
     public Map<String, String> deleteManager(String manId){
-        Map<String,String> resultMap = new HashMap<String,String>();
-        if(superManagerService.deleteManager(manId) == 0){
+        Map<String,String> resultMap = superManagerService.deleteManager(manId);
+        if(!resultMap.get("msg").equals("success")){
             resultMap.put("result","fail");
             return resultMap;
         }
@@ -146,9 +170,9 @@ public class SuperManagerController {
     @PostMapping(value = "/team")
     @ResponseBody
     public Map<String,String> addTeam(@RequestBody Team team){
-        Map<String,String> resultMap = new HashMap<String,String>();
+        Map<String,String> resultMap = superManagerService.addTeam(team);
         resultMap.put("result","success");
-        if(superManagerService.addTeam(team) <= 0 )
+        if(!resultMap.get("msg").equals("success"))
             resultMap.put("result","fail");
         return resultMap;
     }
@@ -156,8 +180,8 @@ public class SuperManagerController {
     @DeleteMapping(value = "/team")
     @ResponseBody
     public Map<String, String> deleteManager(Integer claId){
-        Map<String,String> resultMap = new HashMap<String,String>();
-        if(superManagerService.deleteTeam(claId) == 0){
+        Map<String,String> resultMap = superManagerService.deleteTeam(claId);
+        if(resultMap.get("msg").equals("success")){
             resultMap.put("result","fail");
             return resultMap;
         }

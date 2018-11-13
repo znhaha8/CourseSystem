@@ -1,5 +1,7 @@
 package main.com.WCZZ.entity;
 
+import org.omg.CORBA.OMGVMCID;
+
 import java.util.Date;
 
 public class Student {
@@ -9,7 +11,7 @@ public class Student {
 
     private String sex;
 
-    private String graName;
+    private Integer graName;
 
     private String acaName;
 
@@ -46,11 +48,11 @@ public class Student {
         this.sex = sex;
     }
 
-    public String getGraName() {
+    public Integer getGraName() {
         return graName;
     }
 
-    public void setGraName(String graName) {
+    public void setGraName(Integer graName) {
         this.graName = graName;
     }
 
@@ -95,7 +97,7 @@ public class Student {
     }
 
 
-    public Student(String stuId, String stuName, String graName, String acaName, String proName, String claName) {
+    public Student(String stuId, String stuName, Integer graName, String acaName, String proName, String claName) {
         this.stuId = stuId;
         this.stuName = stuName;
         this.graName = graName;
@@ -104,7 +106,7 @@ public class Student {
         this.claName = claName;
     }
 
-    public Student(String stuName, String sex, String graName, String acaName, String proName, String claName, String phone) {
+    public Student(String stuName, String sex, Integer graName, String acaName, String proName, String claName, String phone) {
         this.stuName = stuName;
         this.sex = sex;
         this.graName = graName;

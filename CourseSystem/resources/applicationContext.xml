@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
-       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
@@ -11,7 +11,7 @@
        http://mybatis.org/schema/mybatis-spring
        http://mybatis.org/schema/mybatis-spring.xsd
        http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd">
+       http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
         <context:component-scan base-package="main">
             <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
@@ -19,6 +19,8 @@
 
     <context:property-placeholder location="classpath:dbconfig.properties"/>
 
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    </bean>
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <property name="jdbcUrl" value="${jdbc.url}"/>
         <property name="driverClass" value="${jdbc.driver}"/>
@@ -39,6 +41,7 @@
         <property name="mapperLocations" value="classpath:main/com/WCZZ/mapper/*.xml"/>
     </bean>
 
+    
     <mybatis-spring:scan base-package="main.com.WCZZ.mapper"/>
 
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
@@ -79,12 +82,19 @@
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="userRealm" />
         <property name="cacheManager" ref="cacheManager"/>
-        <!--<property name="sessionManager" ref="sessionManager"/>-->
+<!--        <property name="sessionManager" ref="sessionManager"/>-->
     </bean>
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
         <property name="loginUrl" value="/user/notLogin" />
+        <property name="filters">
+            <util:map>
+                <entry key="roles" value-ref="rolesAuthorizationFilter"/>
+                <entry key="authc" value-ref="myAuthenticationFilter"/>
+                <entry key="user" value-ref="userFilter" />
+            </util:map>
+        </property>
         <property name="unauthorizedUrl" value="/user/unauthorized" />
         <property name="filterChainDefinitions">
             <value>
@@ -92,6 +102,7 @@
                 /student/** = authc,roles[student]
                 /manager/** = authc,roles[manager]
                 /superManager/** = authc,roles[superManager]
+                /** = anon
             </value>
         </property>
     </bean>
@@ -100,5 +111,8 @@
         <property name="hashAlgorithmName" value="md5" />
         <property name="hashIterations" value="1" />
     </bean>
-
+    <bean id="rolesAuthorizationFilter" class="main.com.WCZZ.util.ExtendRolesAuthorizationFilter"/>
+    <bean id="myAuthenticationFilter" class="main.com.WCZZ.util.MyAuthenticationFilter" />
+    <bean id="adviceFilter" class="main.com.WCZZ.util.myFilter.MyAdviceFilter" />
+    <bean id="userFilter" class="main.com.WCZZ.util.ShiroUserFilter" />
 </beans>

@@ -12,9 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class SuperManagerService {
@@ -29,12 +27,14 @@ public class SuperManagerService {
     @Autowired
     UserRoleMapper userRoleMapper;
 
+
     public List<SuperManager> querySupManager(String supId,String supName){
         return superManagerMapper.query(supId,supName);
     }
 
     @Transactional
-    public Integer addSupManager(SuperManager superManager){
+    public Map<String, String> addSupManager(SuperManager superManager){
+        Map<String, String> result = new HashMap<>();
         String supId = IdGenerator.generateId();
         String password = IdGenerator.generatePassword(supId);
         String createDate = TimeUtil.dateToString(new Date());
@@ -48,21 +48,39 @@ public class SuperManagerService {
         int res = (userMapper.add(user) == 1
                 && superManagerMapper.add(superManager) == 1
                 && userRoleMapper.add(user.getId(),1) == 1) ? 1 : 0;
-        return res;
+        if(res == 0){
+            result.put("msg","fail");
+        }else {
+            result.put("msg","success");
+            result.put("supId",supId);
+        }
+        return result;
     }
 
     @Transactional
-    public Integer modifySupManager(SuperManager superManager){
-        return superManagerMapper.modify(superManager);
+    public Map<String, String> modifySupManager(SuperManager superManager){
+        Map<String, String> result = new HashMap<>();
+        if(superManagerMapper.modify(superManager) == 0){
+            result.put("msg","fail");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
     @Transactional
-    public Integer deleteSupManager(String supId){
+    public Map<String, String> deleteSupManager(String supId){
+        Map<String, String> result = new HashMap<>();
         Integer res = (superManagerMapper.delete(supId) == 0
                         || userMapper.delete(supId)==0
                         || userRoleMapper.delete(supId) == 0)
                     ? 0 : 1;
-        return res;
+        if(res == 0){
+            result.put("msg", "fail");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
     public List<Manager> queryManager(String manId, String manName, String graName){
@@ -70,7 +88,8 @@ public class SuperManagerService {
     }
 
     @Transactional
-    public Integer addManager(Manager manager){
+    public Map<String, String> addManager(Manager manager){
+        Map<String, String> result = new HashMap<>();
         String manId = IdGenerator.generateId();
         String password = IdGenerator.generatePassword(manId);
         String createDate = TimeUtil.dateToString(new Date());
@@ -84,29 +103,53 @@ public class SuperManagerService {
         int res = (userMapper.add(user) == 1
                 && managerMapper.add(manager) == 1
                 && userRoleMapper.add(user.getId(),2) == 1) ? 1 : 0;
-        return res;
+        if(res == 0){
+            result.put("msg","fail");
+        }else {
+            result.put("msg","success");
+            result.put("supId",manId);
+        }
+        return result;
     }
 
     @Transactional
-    public Integer modifyManager(Manager manager){
-        return managerMapper.modify(manager);
+    public Map<String, String> modifyManager(Manager manager){
+        Map<String, String> result = new HashMap<>();
+        if(managerMapper.modify(manager) == 0 ){
+            result.put("msg", "注意字段长度");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
     @Transactional
-    public Integer deleteManager(String manId){
+    public Map<String, String> deleteManager(String manId){
+        Map<String, String> result = new HashMap<>();
         Integer res = (managerMapper.delete(manId) == 0
                 || userMapper.delete(manId)==0
                 || userRoleMapper.delete(manId) == 0)
                 ? 0 : 1;
-        return res;
+        if(res == 0){
+            result.put("msg", "fail");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
     @Transactional
-    public Integer addTeam(Team team){
-        if (teamMapper.query(team).size() != 0)
-            return 0;
+    public Map<String, String> addTeam(Team team){
+        Map<String, String> result = new HashMap<>();
+        if (teamMapper.query(team).size() != 0) {
+            result.put("msg", "班级已存在");
+            return result;
+        }
         team.setCreateDate(TimeUtil.dateToString(new Date()));
-        return teamMapper.add(team);
+        if(teamMapper.add(team) == 0){
+            result.put("msg","fail");
+        }
+        return result;
     }
 
     public List<Team> queryTeam(Team team){
@@ -114,8 +157,14 @@ public class SuperManagerService {
     }
 
     @Transactional
-    public Integer deleteTeam(Integer claId){
-        return teamMapper.deleteById(claId);
+    public Map<String, String> deleteTeam(Integer claId){
+        Map<String, String> result = new HashMap<>();
+        if(teamMapper.deleteById(claId) == 0){
+            result.put("msg", "id不存在或者异常");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
 

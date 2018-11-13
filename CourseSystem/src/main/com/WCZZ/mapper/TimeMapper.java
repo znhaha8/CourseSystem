@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface TimeMapper{
     Integer add(Time time);
-    List<Time> queryByGraAndType(@Param("graName") String graName, @Param("type") String type);
+    List<Time> queryByGraAndType(@Param("graName") Integer graName, @Param("type") String type);
     Integer modify(Time time);
     Integer deleteById(@Param("timeId") Integer timeId);
 }

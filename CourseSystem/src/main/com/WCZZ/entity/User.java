@@ -60,7 +60,7 @@ public class User {
         this.createDate = createDate;
     }
 
-    User(){}
+    public User(){}
 
     public User(String id, String username, String password, String salt, String createDate) {
         this.id = id;

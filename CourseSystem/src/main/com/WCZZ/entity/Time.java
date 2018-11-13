@@ -4,7 +4,7 @@ public class Time {
 
     private Integer TimeId;
 
-    private String graName;
+    private Integer graName;
 
     private String start;
 
@@ -12,11 +12,11 @@ public class Time {
 
     private String type;
 
-    public String getGraName() {
+    public Integer getGraName() {
         return graName;
     }
 
-    public void setGraName(String graName) {
+    public void setGraName(Integer graName) {
         this.graName = graName;
     }
 

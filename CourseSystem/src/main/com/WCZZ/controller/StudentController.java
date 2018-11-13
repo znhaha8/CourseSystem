@@ -37,9 +37,9 @@ public class StudentController {
     @PutMapping("/self/modifyPhone")
     @ResponseBody
     public Map<String,String> modifyPhone(String phone){
-        Map<String,String> resultMap = new HashMap<String,String>();
         String stuId = (String)SecurityUtils.getSubject().getPrincipal();
-        if(studentService.modifyPhone(stuId, phone) == 0){
+        Map<String,String> resultMap = studentService.modifyPhone(stuId, phone);
+        if(!resultMap.get("msg").equals("success")){
             resultMap.put("result","fail");
             return resultMap;
         }
@@ -50,7 +50,7 @@ public class StudentController {
 
     @GetMapping(value = "/course")
     @ResponseBody
-    public Map<String,List<Course>> chooseCourse(){
+    public Map<String,List<Course>> queryStuCourse(){
         Map<String,List<Course>> resultMap = new HashMap<String,List<Course>>();
         resultMap.put("result", studentService.queryCourse());
         return resultMap;
@@ -59,8 +59,8 @@ public class StudentController {
     @GetMapping(value = "/choose")
     @ResponseBody
     public Map<String,String> chooseCourse(String couName){
-        Map<String,String> resultMap = new HashMap<String,String>();
-        if(studentService.chooseCourse(couName) == 0){
+        Map<String,String> resultMap = studentService.chooseCourse(couName);
+        if(!resultMap.get("msg").equals("success")){
             resultMap.put("result", "fail");
             return resultMap;
         }
@@ -71,8 +71,8 @@ public class StudentController {
     @GetMapping(value = "/withdraw")
     @ResponseBody
     public Map<String,String> withdrawCourse(Integer choiceId){
-        Map<String,String> resultMap = new HashMap<String,String>();
-        if(studentService.withDrawCourse(choiceId) == 0){
+        Map<String,String> resultMap = studentService.withDrawCourse(choiceId);
+        if(!resultMap.get("msg").equals("success")){
             resultMap.put("result", "fail");
             return resultMap;
         }

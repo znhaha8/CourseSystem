@@ -11,17 +11,26 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-<!--    <context:component-scan base-package="main.com.WCZZ.controller" use-default-filters="false">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>-->
+    <!--    <context:component-scan base-package="main.com.WCZZ.controller" use-default-filters="false">
+            <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        </context:component-scan>-->
 
-<!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="suffix" value=".jsp" />
-        <property name="prefix" value="/WEB-INF/pages/"/>
-    </bean>-->
+    <!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="suffix" value=".jsp" />
+            <property name="prefix" value="/WEB-INF/pages/"/>
+        </bean>-->
     <context:component-scan base-package="main.com.WCZZ.controller" />
     <mvc:annotation-driven />
     <mvc:default-servlet-handler></mvc:default-servlet-handler>
-    <mvc:resources mapping="/*" location="/"></mvc:resources>
+    <!--<mvc:resources mapping="/*" location="/"></mvc:resources>-->
+
+    <mvc:cors>
+        <mvc:mapping path="/**"
+                     allowed-origins="*"
+                     allowed-methods="POST, GET, OPTIONS, DELETE, PUT"
+                     allowed-headers="Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
+                     allow-credentials="true" />
+    </mvc:cors>
+
 
 </beans>

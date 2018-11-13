@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class ManagerService {
@@ -30,16 +28,36 @@ public class ManagerService {
     UserRoleMapper userRoleMapper;
     @Autowired
     StuCourseMapper stuCourseMapper;
+    @Autowired
+    ManagerMapper managerMapper;
 
 
-    public List<Student> queryStudent(Student student){
+    public List<Manager> querySelf(String manId) {
+        return managerMapper.query(manId, null, null);
+    }
+
+    public Map<String ,String> modifyPhone(String manId, String phone) {
+        Map<String ,String> result = new HashMap<>();
+        if(phone.length() > 16){
+            result.put("msg", " 电话长度大于16");
+            return result;
+        }
+        if(managerMapper.modifyPhone(manId, phone) == 0){
+            result.put("msg", "id不存在");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
+    }
+
+    public List<Student> queryStudent(Student student) {
         List<Student> students = null;
         students = studentMapper.query(student);
         return students;
     }
 
     @Transactional
-    public Integer addStudent(Student student){
+    public Integer addStudent(Student student) {
         String stuId = IdGenerator.generateId();
         String password = IdGenerator.generatePassword(stuId);
         String createDate = TimeUtil.dateToString(new Date());
@@ -47,123 +65,203 @@ public class ManagerService {
         student.setCreateDate(createDate);
         Random random = new Random();
         String salt = String.valueOf(random.nextInt(10000));
-        Md5Hash md5Hash = new Md5Hash(password,salt);
+        Md5Hash md5Hash = new Md5Hash(password, salt);
         password = md5Hash.toString();
-        User user = new User(stuId,stuId,password,salt,createDate);
+        User user = new User(stuId, stuId, password, salt, createDate);
         int res = (userMapper.add(user) == 1
                 && studentMapper.add(student) == 1
-                && userRoleMapper.add(user.getId(),3) == 1)
+                && userRoleMapper.add(user.getId(), 3) == 1)
                 ? 1 : 0;
         return res;
     }
 
     @Transactional
-    public Integer modifyStudent(Student student){
-        return studentMapper.modifyById(student);
+    public Map<String, String> modifyStudent(Student student) {
+        Map<String, String> result = new HashMap<>();
+        if(studentMapper.modifyById(student) == 0){
+            result.put("msg" , "该学生id不存在");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
     @Transactional
-    public Integer deleteStudent(String stuId){
+    public Integer deleteStudent(String stuId) {
         Integer res = (studentMapper.delete(stuId) == 0
-                || userMapper.delete(stuId)==0
+                || userMapper.delete(stuId) == 0
                 || userRoleMapper.delete(stuId) == 0)
                 ? 0 : 1;
         return res;
     }
 
-    public List<Choice> queryChoice(Integer choiceId, String stuId, String couName){
-        return choiceMapper.queryByIdAndName(choiceId,stuId,couName);
+    public List<Choice> queryChoice(Integer choiceId, String stuId, String couName) {
+        return choiceMapper.queryByIdAndName(choiceId, stuId, couName);
     }
 
 
     @Transactional
-    public Integer deleteChoice(Integer choiceId){
-        return choiceMapper.delete(choiceId);
+    public Map<String, String> deleteChoice(Integer choiceId) {
+        Map<String, String> result = new HashMap<>();
+        if(choiceMapper.delete(choiceId) == 0){
+            result.put("msg" , "该选课记录id不存在");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
     @Transactional
-    public Integer addCourse(Course course){
-        return courseMapper.add(course);
+    public Map<String, String> addCourse(Course course) {
+        Map<String, String> result = new HashMap<>();
+        if(courseMapper.query(null,course.getCouName()).size() != 0){
+            result.put("msg", "该课程名已存在");
+            return result;
+        }
+        if(courseMapper.add(course) == 0 ){
+            result.put("msg", "fail");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
-    public List<Course> queryCourse(String courseName){
-        return courseMapper.query(courseName);
+    public List<Course> queryCourse(Integer couId, String courseName) {
+        return courseMapper.query(couId,courseName);
     }
 
     @Transactional
-    public Integer modifyCourse(Course course){
-        return courseMapper.modifyById(course);
+    public Map<String, String> modifyCourse(Course course) {
+        Map<String, String > result = new HashMap<>();
+        if(courseMapper.modifyById(course) == 0){
+            result.put("msg", "id不存在或字段长度不符合");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
     @Transactional
-    public Integer deleteCourse(Integer couId){
-        return courseMapper.deleteById(couId);
+    public Map<String, String> deleteCourse(Integer couId) {
+        Map<String, String> result = new HashMap<>();
+        if(courseMapper.deleteById(couId) == 0){
+            result.put("msg", "id不存在");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
-
 
 
     @Transactional
-    public Integer addStuCourse(StudentCourse studentCourse){
-        if(stuCourseMapper.query(studentCourse).size() != 0)
-            return 0;
-        if(courseMapper.query(studentCourse.getCouName()).size() == 0)
-            return 0;
-        return stuCourseMapper.add(studentCourse);
+    public Map<String, String> addStuCourse(StudentCourse studentCourse) {
+        Map<String, String> result = new HashMap<>();
+        if (stuCourseMapper.query(studentCourse).size() != 0) {
+            result.put("msg", "该记录已存在");
+            return result;
+        }
+        if (courseMapper.query(null, studentCourse.getCouName()).size() == 0) {
+            result.put("msg", "学生可选课表不存在改课程");
+        }
+        if (stuCourseMapper.add(studentCourse) == 0) {
+            result.put("msg", "fail");
+        } else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
-    public List<StudentCourse> queryStuCourse(String graName, String proName, String couName){
+    public List<StudentCourse> queryStuCourse(String graName, String proName, String couName) {
         StudentCourse studentCourse = new StudentCourse(graName, proName, couName);
         return stuCourseMapper.query(studentCourse);
     }
 
     @Transactional
-    public Integer modifyStuCourse(StudentCourse studentCourse){
-        if(courseMapper.query(studentCourse.getCouName()).size() == 0)
-            return 0;
-        return stuCourseMapper.modify(studentCourse);
+    public Map<String, String> modifyStuCourse(StudentCourse studentCourse) {
+        Map<String, String> result = new HashMap();
+        if (courseMapper.query(null, studentCourse.getCouName()).size() == 0) {
+            result.put("msg", "学生可选课表不存在该课程");
+            return result;
+        }
+        if (stuCourseMapper.modify(studentCourse) == 0) {
+            result.put("msg", "fail");
+        } else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
     @Transactional
-    public Integer deleteStuCourse(Integer stuCourseId){
-        return stuCourseMapper.delete(stuCourseId);
+    public Map<String, String> deleteStuCourse(Integer stuCourseId) {
+        Map<String, String> result = new HashMap<>();
+        if(stuCourseMapper.delete(stuCourseId) == 0){
+            result.put("msg" , "id不存在");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
 
-
     @Transactional
-    public Integer addTime(Time time){
+    public Map<String, String> addTime(Time time) {
+        Map<String, String> result = new HashMap();
         try {
-            if (TimeUtil.stringToDate(time.getStart()).getTime() > TimeUtil.stringToDate(time.getEnd()).getTime())
-                return 0;
-            if(timeMapper.queryByGraAndType(time.getGraName(),time.getType()).size() != 0){
-                return 0;
+            if (TimeUtil.stringToDate(time.getStart()).getTime() > TimeUtil.stringToDate(time.getEnd()).getTime()) {
+                result.put("msg", "开始时间不能大于结束时间");
+                return result;
+            }
+            if (timeMapper.queryByGraAndType(time.getGraName(), time.getType()).size() != 0) {
+                result.put("msg", "时间表已存在同年级同类型的时间");
+                return result;
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            return 0;
+            result.put("msg", "时间解析异常");
+            return result;
         }
-        return timeMapper.add(time);
+        if (timeMapper.add(time) == 0) {
+            result.put("msg", "fail");
+        } else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
-    public List<Time> queryTime(String graName, String type){
-        return timeMapper.queryByGraAndType(graName,type);
+    public List<Time> queryTime(Integer graName, String type) {
+        return timeMapper.queryByGraAndType(graName, type);
     }
 
     @Transactional
-    public Integer modifyTime(Time time){
+    public Map<String, String> modifyTime(Time time) {
+        Map<String, String> result = new HashMap();
         try {
-            if (TimeUtil.stringToDate(time.getStart()).getTime() > TimeUtil.stringToDate(time.getEnd()).getTime())
-                return 0;
+            if (TimeUtil.stringToDate(time.getStart()).getTime() > TimeUtil.stringToDate(time.getEnd()).getTime()) {
+                result.put("msg", "开始时间不能大于结束时间");
+                return result;
+            }
         } catch (ParseException e) {
             e.printStackTrace();
-            return 0;
+            result.put("msg", "时间解析异常");
+            return result;
         }
-        return timeMapper.modify(time);
+        if (timeMapper.modify(time) == 0) {
+            result.put("msg", "fail");
+        } else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
     @Transactional
-    public Integer deleteTime(Integer timeId){
-        return timeMapper.deleteById(timeId);
+    public Map<String, String> deleteTime(Integer timeId) {
+        Map<String, String> result = new HashMap<>();
+        if(timeMapper.deleteById(timeId) == 0){
+            result.put("msg" , "id不存在");
+        }else {
+            result.put("msg", "success");
+        }
+        return result;
     }
 
 
