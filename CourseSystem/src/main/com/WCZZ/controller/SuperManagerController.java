@@ -83,6 +83,7 @@ public class SuperManagerController {
             return resultMap;
         }
         resultMap.put("result","success");
+        SecurityUtils.getSubject().logout();
         return resultMap;
     }
 
@@ -181,7 +182,7 @@ public class SuperManagerController {
     @ResponseBody
     public Map<String, String> deleteManager(Integer claId){
         Map<String,String> resultMap = superManagerService.deleteTeam(claId);
-        if(resultMap.get("msg").equals("success")){
+        if(!resultMap.get("msg").equals("success")){
             resultMap.put("result","fail");
             return resultMap;
         }

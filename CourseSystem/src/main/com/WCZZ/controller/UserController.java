@@ -28,10 +28,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @CrossOrigin
@@ -54,6 +51,10 @@ public class UserController {
             e.printStackTrace();
             resultMap.put("result", "fail");
             return resultMap;
+        }
+        Set<String> roles = userService.findRoles(username);
+        for (String role : roles) {
+            resultMap.put("msg",role);
         }
         resultMap.put("result", "success");
         return resultMap;

@@ -116,7 +116,7 @@ public class SuperManagerService {
     public Map<String, String> modifyManager(Manager manager){
         Map<String, String> result = new HashMap<>();
         if(managerMapper.modify(manager) == 0 ){
-            result.put("msg", "注意字段长度");
+            result.put("msg", "操作数量为 0");
         }else {
             result.put("msg", "success");
         }
@@ -141,14 +141,16 @@ public class SuperManagerService {
     @Transactional
     public Map<String, String> addTeam(Team team){
         Map<String, String> result = new HashMap<>();
-        if (teamMapper.query(team).size() != 0) {
+        if (teamMapper.queryAC(team).size() != 0) {
             result.put("msg", "班级已存在");
             return result;
         }
         team.setCreateDate(TimeUtil.dateToString(new Date()));
         if(teamMapper.add(team) == 0){
             result.put("msg","fail");
+            return result;
         }
+        result.put("msg","success");
         return result;
     }
 

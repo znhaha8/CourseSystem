@@ -2,7 +2,7 @@ package main.com.WCZZ.entity;
 
 public class StudentCourse {
     private Integer id;
-    private String graName;
+    private Integer graName;
     private String proName;
     private String couName;
 
@@ -14,11 +14,11 @@ public class StudentCourse {
         this.id = id;
     }
 
-    public String getGraName() {
+    public Integer getGraName() {
         return graName;
     }
 
-    public void setGraName(String graName) {
+    public void setGraName(Integer graName) {
         this.graName = graName;
     }
 
@@ -38,7 +38,8 @@ public class StudentCourse {
         this.couName = couName;
     }
 
-    public StudentCourse(String graName, String proName, String couName) {
+    public StudentCourse(Integer id, Integer graName, String proName, String couName) {
+        this.id = id;
         this.graName = graName;
         this.proName = proName;
         this.couName = couName;

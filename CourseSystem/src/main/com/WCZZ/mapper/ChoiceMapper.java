@@ -13,4 +13,5 @@ public interface ChoiceMapper{
     Integer withdraw(@Param("choiceId") Integer choiceId, @Param("withdrawDate") String withdrawDate);
     List<Choice> queryByStuId(@Param("stuId") String stuId);
     Integer delete(@Param("choiceId") Integer choiceId);
+    Integer chooseNecessity(@Param("choices") List<Choice> choices);
 }

@@ -4,6 +4,7 @@ import main.com.WCZZ.entity.*;
 import main.com.WCZZ.mapper.*;
 import main.com.WCZZ.util.IdGenerator;
 import main.com.WCZZ.util.TimeUtil;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,8 @@ public class ManagerService {
     StuCourseMapper stuCourseMapper;
     @Autowired
     ManagerMapper managerMapper;
+    @Autowired
+    TeamMapper teamMapper;
 
 
     public List<Manager> querySelf(String manId) {
@@ -171,8 +174,8 @@ public class ManagerService {
         return result;
     }
 
-    public List<StudentCourse> queryStuCourse(String graName, String proName, String couName) {
-        StudentCourse studentCourse = new StudentCourse(graName, proName, couName);
+    public List<StudentCourse> queryStuCourse(Integer id, Integer graName, String proName, String couName) {
+        StudentCourse studentCourse = new StudentCourse(id, graName, proName, couName);
         return stuCourseMapper.query(studentCourse);
     }
 
@@ -264,5 +267,26 @@ public class ManagerService {
         return result;
     }
 
+
+    public Map<String,String> aadNecessaryChoice() {
+        Map<String, String> result = new HashMap<>();
+        String manId = (String) SecurityUtils.getSubject().getPrincipal();
+        Integer graName = querySelf(manId).get(0).getGraName();
+        List<StudentCourse> studentCourses = stuCourseMapper.query(new StudentCourse(null, graName, null, null));
+        List<Choice> choices = new ArrayList<>();
+        String chooseDate = TimeUtil.dateToString(new Date());
+        for (StudentCourse studentCourse : studentCourses) {
+            if (courseMapper.query(null, studentCourse.getCouName()).get(0).getNecessity() == 1) {
+                List<Student> students = queryStudent(new Student(null, null, graName, null, studentCourse.getProName(), null));
+                for (Student student : students) {
+                    if (choiceMapper.queryByIdAndName(null,student.getStuId(),studentCourse.getCouName()).size() ==0 )
+                        choices.add(new Choice(student.getStuId(), studentCourse.getCouName(), chooseDate));
+                }
+            }
+        }
+        result.put("result", "success");
+        result.put("msg", "操作记录数量为" + choiceMapper.chooseNecessity(choices));
+        return result;
+    }
 
 }

@@ -51,4 +51,12 @@ public class Choice {
     public void setWithdrawDate(String withdrawDate) {
         this.withdrawDate = withdrawDate;
     }
+
+    public Choice(String stuId, String couName, String chooseDate) {
+        this.stuId = stuId;
+        this.couName = couName;
+        this.chooseDate = chooseDate;
+    }
+
+    public Choice(){}
 }

@@ -284,9 +284,9 @@ public class ManagerController {
 
     @GetMapping(value = "/StuCourse")
     @ResponseBody
-    public Map<String,List<StudentCourse>> queryStuCourse(String graName, String proName, String couName){
+    public Map<String,List<StudentCourse>> queryStuCourse(Integer id, Integer graName, String proName, String couName){
         Map<String,List<StudentCourse>> resultMap = new HashMap<String,List<StudentCourse>>();
-        resultMap.put("result", managerService.queryStuCourse(graName,proName,couName));
+        resultMap.put("result", managerService.queryStuCourse(id,graName,proName,couName));
         return resultMap;
     }
 
@@ -359,6 +359,21 @@ public class ManagerController {
             return resultMap;
         }
         resultMap.put("result", "success");
+        return resultMap;
+    }
+
+    @GetMapping("/chooseNecessity")
+    @ResponseBody
+    public Map<String, String> chooseNecessity(){
+        Map <String, String> resultMap = null;
+        try{
+            resultMap = managerService.aadNecessaryChoice();
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap = new HashMap<>();
+            resultMap.put("result", "fail");
+            resultMap.put("msg","异常(确定是否还有学生需要选取必修课程)");
+        }
         return resultMap;
     }
 }

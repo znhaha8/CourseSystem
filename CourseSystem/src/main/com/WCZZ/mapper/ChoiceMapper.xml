@@ -64,6 +64,22 @@
       #{chooseDate}
     )
   </update>
+
+  <insert id="chooseNecessity" parameterType="main.com.WCZZ.entity.Choice">
+    replace INTO choice (
+      stu_id,
+      cou_name,
+      choose_date
+    )VALUES
+      <foreach collection="choices" item="choice" index="index" separator=",">
+        (
+          #{choice.stuId},
+          #{choice.couName},
+          #{choice.chooseDate}
+        )
+      UNION
+      </foreach>
+  </insert>
   
   <update id="withdraw" parameterType="main.com.WCZZ.entity.Choice">
     UPDATE choice

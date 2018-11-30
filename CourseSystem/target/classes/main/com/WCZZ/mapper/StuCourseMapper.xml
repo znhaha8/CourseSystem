@@ -7,6 +7,9 @@
         FROM student_course
         <where>
              del_flag != 0
+            <if test="id != null">
+                AND id = #{id}
+            </if>
             <if test="graName != null and graName != ''">
                 AND gra_name LIKE CONCAT ('%',#{graName},'%')
             </if>
